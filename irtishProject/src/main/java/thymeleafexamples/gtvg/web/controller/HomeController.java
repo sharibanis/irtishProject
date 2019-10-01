@@ -23,15 +23,26 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
 import java.io.StringReader;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.bson.BsonDouble;
+import org.bson.Document;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.WebContext;
+
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 import tk.plogitech.darksky.forecast.APIKey;
 import tk.plogitech.darksky.forecast.DarkSkyClient;
@@ -45,7 +56,10 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
-public class HomeController implements IGTVGController {
+import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;public class HomeController implements IGTVGController {
 	
 	Logger log = Logger.getLogger(this.getClass().getName());
 	Object object = new Object();
@@ -226,8 +240,56 @@ public class HomeController implements IGTVGController {
         .build();
         ctx.setVariable("forecast5", jsonForecast5);
         log.debug(jsonForecast5);
-        
-        templateEngine.process("home", ctx, response.getWriter());
-    }
+    	log.info("Fetched Dark Sky weather info.");
+    	
+    	log.info("Connecting to MongoDB...");
+		MongoClientURI uri = new MongoClientURI(
+			"mongodb+srv://irtishProject:irtishProject@sharib0-35h98.mongodb.net/test?retryWrites=true&w=majority");
+		MongoClient mongoClient = new MongoClient(uri);
+		MongoDatabase database = mongoClient.getDatabase("irtishProjectDB");
+		MongoCollection<Document> collection = database.getCollection("irtishProject");
+    	log.info("Updating MongoDB...");
+		List<Document> documents = new ArrayList<Document>();
+		Document doc = new Document("name", "Campbell, CA")
+                .append("temperatureHigh", jsonObject011.getJsonNumber("temperatureHigh").doubleValue())
+                .append("temperatureLow", jsonObject011.getJsonNumber("temperatureLow").doubleValue())
+                .append("summary", jsonObject011.getString("summary"));
 
+		documents.add(doc);
+		doc = new Document("name", "Omaha, NE")
+                .append("temperatureHigh", jsonObject111.getJsonNumber("temperatureHigh").doubleValue())
+                .append("temperatureLow", jsonObject111.getJsonNumber("temperatureLow").doubleValue())
+                .append("summary", jsonObject111.getString("summary"));
+
+		documents.add(doc);
+		doc = new Document("name", "Austin, TX")
+                .append("temperatureHigh", jsonObject211.getJsonNumber("temperatureHigh").doubleValue())
+                .append("temperatureLow", jsonObject211.getJsonNumber("temperatureLow").doubleValue())
+                .append("summary", jsonObject211.getString("summary"));
+
+		documents.add(doc);
+		doc = new Document("name", "Niseko, Japan")
+                .append("temperatureHigh", jsonObject311.getJsonNumber("temperatureHigh").doubleValue())
+                .append("temperatureLow", jsonObject311.getJsonNumber("temperatureLow").doubleValue())
+                .append("summary", jsonObject311.getString("summary"));
+
+		documents.add(doc);
+		doc = new Document("name", "Nara, Japan")
+                .append("temperatureHigh", jsonObject411.getJsonNumber("temperatureHigh").doubleValue())
+                .append("temperatureLow", jsonObject411.getJsonNumber("temperatureLow").doubleValue())
+                .append("summary", jsonObject411.getString("summary"));
+
+		documents.add(doc);
+		doc = new Document("name", "Jakarta, Indonesia")
+                .append("temperatureHigh", jsonObject511.getJsonNumber("temperatureHigh").doubleValue())
+                .append("temperatureLow", jsonObject511.getJsonNumber("temperatureLow").doubleValue())
+                .append("summary", jsonObject511.getString("summary"));
+
+		documents.add(doc);
+		collection.insertMany(documents);
+		mongoClient.close();
+    	log.info("Updated MongoDB.");
+        templateEngine.process("home", ctx, response.getWriter());
+		
+    }
 }
