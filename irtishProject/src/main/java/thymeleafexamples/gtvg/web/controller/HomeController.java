@@ -19,18 +19,37 @@
  */
 package thymeleafexamples.gtvg.web.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.StringBufferInputStream;
+import java.io.StringReader;
 import java.util.Calendar;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.WebContext;
 
+import tk.plogitech.darksky.forecast.APIKey;
+import tk.plogitech.darksky.forecast.DarkSkyClient;
+import tk.plogitech.darksky.forecast.ForecastRequest;
+import tk.plogitech.darksky.forecast.ForecastRequestBuilder;
+import tk.plogitech.darksky.forecast.GeoCoordinates;
+import tk.plogitech.darksky.forecast.model.Latitude;
+import tk.plogitech.darksky.forecast.model.Longitude;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
 public class HomeController implements IGTVGController {
-
-    
+	
+	Logger log = Logger.getLogger(this.getClass().getName());
+	Object object = new Object();
+	
     public HomeController() {
         super();
     }
@@ -44,8 +63,171 @@ public class HomeController implements IGTVGController {
         WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
         ctx.setVariable("today", Calendar.getInstance());
         
-        templateEngine.process("home", ctx, response.getWriter());
+        // get Dark Sky weather info using https://github.com/200Puls/darksky-forecast-api driver
+    	log.info("Fetching Dark Sky weather info...");
+        //Campbell, CA
+        ForecastRequest forecastRequest0 = new ForecastRequestBuilder()
+                .key(new APIKey("4b622e0e8337b11f1fa5fe9af2a19ee1"))
+                .language(ForecastRequestBuilder.Language.en)
+                .units(ForecastRequestBuilder.Units.si)
+                .exclude(ForecastRequestBuilder.Block.minutely)
+                .location(new GeoCoordinates(new Longitude(-121.949959), new Latitude(37.287167))).build();
+
+        DarkSkyClient client0 = new DarkSkyClient();
+        String forecast0 = client0.forecastJsonString(forecastRequest0);
+        //log.debug(forecast0);
+        byte[] byteArr = forecast0.getBytes();
+        InputStream bis = new ByteArrayInputStream(byteArr);
+        JsonReader jsonReader0 = Json.createReader(bis);
+        JsonObject jsonObject0 = jsonReader0.readObject();
+        JsonObject jsonObject01 = (JsonObject) jsonObject0.get("daily");
+        //log.debug(jsonObject01);
+        JsonArray JsonArray011 = (JsonArray) jsonObject01.getJsonArray("data");
+        JsonObject jsonObject011 = JsonArray011.getJsonObject(0);
+        JsonObject jsonForecast0 = Json.createObjectBuilder()
+        .add("temperatureHigh", jsonObject011.getJsonNumber("temperatureHigh"))
+        .add("temperatureLow", jsonObject011.getJsonNumber("temperatureLow"))
+        .add("summary", jsonObject011.getJsonString("summary"))
+        .build();
+        ctx.setVariable("forecast0", jsonForecast0);
+        log.debug(jsonForecast0);
         
+        //Omaha, NE
+        ForecastRequest forecastRequest1 = new ForecastRequestBuilder()
+                .key(new APIKey("4b622e0e8337b11f1fa5fe9af2a19ee1"))
+                .language(ForecastRequestBuilder.Language.en)
+                .units(ForecastRequestBuilder.Units.si)
+                .exclude(ForecastRequestBuilder.Block.minutely)
+                .location(new GeoCoordinates(new Longitude(-95.995102), new Latitude(41.257160))).build();
+
+        DarkSkyClient client1 = new DarkSkyClient();
+        String forecast1 = client1.forecastJsonString(forecastRequest1);
+        //log.debug(forecast1);
+        byte[] byteArr1 = forecast1.getBytes();
+        InputStream bis1 = new ByteArrayInputStream(byteArr1);
+        JsonReader jsonReader1 = Json.createReader(bis1);
+        JsonObject jsonObject1 = jsonReader1.readObject();
+        JsonObject jsonObject11 = (JsonObject) jsonObject1.get("daily");
+        JsonArray JsonArray111 = (JsonArray) jsonObject11.getJsonArray("data");
+        JsonObject jsonObject111 = JsonArray111.getJsonObject(0);
+        
+        JsonObject jsonForecast1 = Json.createObjectBuilder()
+        .add("temperatureHigh", jsonObject111.getJsonNumber("temperatureHigh"))
+        .add("temperatureLow", jsonObject111.getJsonNumber("temperatureLow"))
+        .add("summary", jsonObject111.getJsonString("summary"))
+        .build();
+        ctx.setVariable("forecast1", jsonForecast1);
+        log.debug(jsonForecast1);
+        
+        //Austin, TX
+        ForecastRequest forecastRequest2 = new ForecastRequestBuilder()
+                .key(new APIKey("4b622e0e8337b11f1fa5fe9af2a19ee1"))
+                .language(ForecastRequestBuilder.Language.en)
+                .units(ForecastRequestBuilder.Units.si)
+                .exclude(ForecastRequestBuilder.Block.minutely)
+                .location(new GeoCoordinates(new Longitude(-97.733330), new Latitude(30.266666))).build();
+
+        DarkSkyClient client2 = new DarkSkyClient();
+        String forecast2 = client2.forecastJsonString(forecastRequest2);
+        //log.debug(forecast2);
+        byte[] byteArr2 = forecast2.getBytes();
+        InputStream bis2 = new ByteArrayInputStream(byteArr2);
+        JsonReader jsonReader2 = Json.createReader(bis2);
+        JsonObject jsonObject2 = jsonReader2.readObject();
+        JsonObject jsonObject21 = (JsonObject) jsonObject2.get("daily");
+        JsonArray JsonArray211 = (JsonArray) jsonObject21.getJsonArray("data");
+        JsonObject jsonObject211 = JsonArray211.getJsonObject(0);
+        
+        JsonObject jsonForecast2 = Json.createObjectBuilder()
+        .add("temperatureHigh", jsonObject211.getJsonNumber("temperatureHigh"))
+        .add("temperatureLow", jsonObject211.getJsonNumber("temperatureLow"))
+        .add("summary", jsonObject211.getJsonString("summary"))
+        .build();
+        ctx.setVariable("forecast2", jsonForecast2);
+        log.debug(jsonForecast2);
+        
+        //Niseko, Japan
+        ForecastRequest forecastRequest3 = new ForecastRequestBuilder()
+                .key(new APIKey("4b622e0e8337b11f1fa5fe9af2a19ee1"))
+                .language(ForecastRequestBuilder.Language.en)
+                .units(ForecastRequestBuilder.Units.si)
+                .exclude(ForecastRequestBuilder.Block.minutely)
+                .location(new GeoCoordinates(new Longitude(140.6874), new Latitude(42.8048))).build();
+
+        DarkSkyClient client3 = new DarkSkyClient();
+        String forecast3 = client3.forecastJsonString(forecastRequest3);
+        //log.debug(forecast3);
+        byte[] byteArr3 = forecast3.getBytes();
+        InputStream bis3 = new ByteArrayInputStream(byteArr3);
+        JsonReader jsonReader3 = Json.createReader(bis3);
+        JsonObject jsonObject3 = jsonReader3.readObject();
+        JsonObject jsonObject31 = (JsonObject) jsonObject3.get("daily");
+        JsonArray JsonArray311 = (JsonArray) jsonObject31.getJsonArray("data");
+        JsonObject jsonObject311 = JsonArray311.getJsonObject(0);
+        
+        JsonObject jsonForecast3 = Json.createObjectBuilder()
+        .add("temperatureHigh", jsonObject311.getJsonNumber("temperatureHigh"))
+        .add("temperatureLow", jsonObject311.getJsonNumber("temperatureLow"))
+        .add("summary", jsonObject311.getJsonString("summary"))
+        .build();
+        ctx.setVariable("forecast3", jsonForecast3);
+        log.debug(jsonForecast3);
+        
+        //Nara, Japan
+        ForecastRequest forecastRequest4 = new ForecastRequestBuilder()
+                .key(new APIKey("4b622e0e8337b11f1fa5fe9af2a19ee1"))
+                .language(ForecastRequestBuilder.Language.en)
+                .units(ForecastRequestBuilder.Units.si)
+                .exclude(ForecastRequestBuilder.Block.minutely)
+                .location(new GeoCoordinates(new Longitude(135.8048), new Latitude(34.6851))).build();
+
+        DarkSkyClient client4 = new DarkSkyClient();
+        String forecast4 = client4.forecastJsonString(forecastRequest4);
+        //log.debug(forecast4);
+        byte[] byteArr4 = forecast4.getBytes();
+        InputStream bis4 = new ByteArrayInputStream(byteArr4);
+        JsonReader jsonReader4 = Json.createReader(bis4);
+        JsonObject jsonObject4 = jsonReader4.readObject();
+        JsonObject jsonObject41 = (JsonObject) jsonObject4.get("daily");
+        JsonArray JsonArray411 = (JsonArray) jsonObject41.getJsonArray("data");
+        JsonObject jsonObject411 = JsonArray411.getJsonObject(0);
+        
+        JsonObject jsonForecast4 = Json.createObjectBuilder()
+        .add("temperatureHigh", jsonObject411.getJsonNumber("temperatureHigh"))
+        .add("temperatureLow", jsonObject411.getJsonNumber("temperatureLow"))
+        .add("summary", jsonObject411.getJsonString("summary"))
+        .build();
+        ctx.setVariable("forecast4", jsonForecast4);
+        log.debug(jsonForecast4);
+        
+        //Jakarta, Indonesia
+        ForecastRequest forecastRequest5 = new ForecastRequestBuilder()
+                .key(new APIKey("4b622e0e8337b11f1fa5fe9af2a19ee1"))
+                .language(ForecastRequestBuilder.Language.en)
+                .units(ForecastRequestBuilder.Units.si)
+                .exclude(ForecastRequestBuilder.Block.minutely)
+                .location(new GeoCoordinates(new Longitude(106.8456), new Latitude(6.2088))).build();
+
+        DarkSkyClient client5 = new DarkSkyClient();
+        String forecast5 = client5.forecastJsonString(forecastRequest5);
+        //log.debug(forecast5);
+        byte[] byteArr5 = forecast5.getBytes();
+        InputStream bis5 = new ByteArrayInputStream(byteArr5);
+        JsonReader jsonReader5 = Json.createReader(bis5);
+        JsonObject jsonObject5 = jsonReader5.readObject();
+        JsonObject jsonObject51 = (JsonObject) jsonObject5.get("daily");
+        JsonArray JsonArray511 = (JsonArray) jsonObject51.getJsonArray("data");
+        JsonObject jsonObject511 = JsonArray511.getJsonObject(0);
+        
+        JsonObject jsonForecast5 = Json.createObjectBuilder()
+        .add("temperatureHigh", jsonObject511.getJsonNumber("temperatureHigh"))
+        .add("temperatureLow", jsonObject511.getJsonNumber("temperatureLow"))
+        .add("summary", jsonObject511.getJsonString("summary"))
+        .build();
+        ctx.setVariable("forecast5", jsonForecast5);
+        log.debug(jsonForecast5);
+        
+        templateEngine.process("home", ctx, response.getWriter());
     }
 
 }
