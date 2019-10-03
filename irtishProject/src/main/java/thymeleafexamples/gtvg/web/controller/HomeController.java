@@ -397,7 +397,7 @@ public class HomeController implements IGTVGController {
         ctx.setVariable("forecast5", jsonForecast5);
         log.debug(jsonForecast5);
     	log.info("Fetched MongoDB weather info.");
-    }
+    	}
     
     
     public void process(
