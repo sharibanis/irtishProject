@@ -15,3 +15,4 @@ another REST API call to Darksky.
 
 Housekeeps forecast records that already 3 days old.
 
+Run the program using ``mvn clean; mvn compile; mvn tomcat7:run``
