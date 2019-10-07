@@ -17,7 +17,7 @@
  * 
  * =============================================================================
  */
-package thymeleafexamples.gtvg.web.controller;
+package sharib.msw.web.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -27,7 +27,11 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -72,13 +76,9 @@ import com.mongodb.client.result.DeleteResult;
 import static com.mongodb.client.model.Updates.*;
 import com.mongodb.client.result.UpdateResult;
 
-public class HomeController implements IGTVGController {
+public class HomeController implements MSWController {
 	
 	Logger log = Logger.getLogger(this.getClass().getName());
-	/*MongoClientURI uri = new MongoClientURI(
-			"mongodb+srv://irtishProject:irtishProject@sharib0-35h98.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClient mongoClient = new MongoClient(uri);*/
-	
     	MongoClientURI uri = new MongoClientURI(
 				"mongodb://irtishProject:irtishProject@localhost:27017/admin");
 		MongoClient mongoClient = new MongoClient(uri);
@@ -399,7 +399,28 @@ public class HomeController implements IGTVGController {
     	log.info("Fetched MongoDB weather info.");
     	}
     
-    
+    void housekeepMongoDB () {
+    	log.info("Housekeeping MongoDB (deleting records older than 3 days) ...");
+
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+
+        // Create a task
+        Runnable housekeeper = () -> {
+        	log.info("Connecting to MongoDB for Housekeping...");
+    		MongoDatabase database = mongoClient.getDatabase("irtishProjectDB");
+    		MongoCollection<Document> collection = database.getCollection("irtishProject");
+        	
+    		long today = System.currentTimeMillis()/1000;
+        	long threeDays = today - (3 * 86400);
+        	Document result = null;
+        	result = collection.find(lt("time", (int)threeDays)).first();
+        	collection.deleteMany(result);
+            log.info("Housekeping MongoDB finished.");    
+        };
+        scheduledExecutorService.scheduleAtFixedRate(housekeeper, 86400, 86400, TimeUnit.SECONDS);
+    }
+
+    	
     public void process(
             final HttpServletRequest request, final HttpServletResponse response,
             final ServletContext servletContext, final ITemplateEngine templateEngine)
@@ -445,7 +466,9 @@ public class HomeController implements IGTVGController {
     		    cursor.close();
     		}
     	}
+    	//housekeeper
+    	housekeepMongoDB();
+    	log.info("Updated MoonSky Weather data.");
         templateEngine.process("home", ctx, response.getWriter());
-		
     }
 }

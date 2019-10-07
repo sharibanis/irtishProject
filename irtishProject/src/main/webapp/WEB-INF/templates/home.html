@@ -5,14 +5,14 @@
   <head>
     <title>MoonSky Weather Channel</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" media="all" href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" />
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/msw.css" th:href="@{/css/msw.css}" />
   </head>
 
   <body>
 
     <div>
-      <img src="../../images/gtvglogo.png" alt="Weather logo" title="Weather logo" 
-           th:src="@{/images/gtvglogo.png}" th:alt-title="#{logo}" />
+      <img src="../../images/mswlogo.png" alt="Weather logo" title="Weather logo" 
+           th:src="@{/images/mswlogo.png}" th:alt-title="#{logo}" />
     </div>
   
     <p th:utext="#{home.welcome}"></p>
@@ -67,8 +67,9 @@
 	    <td><span th:text="${forecast5.summary}"></span></td>
 	  </tr>
 	</table> 
-    
-    <p><a href="subscribe.html" th:href="@{/subscribe}">Update Weather Information</a></p>
+    <br>
+	<input type="button" value = "Refresh" onclick="window.location.reload();" />
+    <br>
     
     <div th:insert="~{footer::copy}">&copy; 2019 The Sharib Templates</div>
   </body>

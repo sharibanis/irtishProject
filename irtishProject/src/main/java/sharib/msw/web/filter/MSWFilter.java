@@ -17,7 +17,7 @@
  * 
  * =============================================================================
  */
-package thymeleafexamples.gtvg.web.filter;
+package sharib.msw.web.filter;
 
 import java.io.IOException;
 
@@ -32,19 +32,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.thymeleaf.ITemplateEngine;
-import thymeleafexamples.gtvg.business.entities.User;
-import thymeleafexamples.gtvg.web.application.GTVGApplication;
-import thymeleafexamples.gtvg.web.controller.IGTVGController;
+import sharib.msw.web.application.MSWApplication;
+import sharib.msw.web.controller.MSWController;
 
 
-public class GTVGFilter implements Filter {
+public class MSWFilter implements Filter {
 
     
     private ServletContext servletContext;
-    private GTVGApplication application;
+    private MSWApplication application;
     
     
-    public GTVGFilter() {
+    public MSWFilter() {
         super();
     }
     
@@ -52,7 +51,7 @@ public class GTVGFilter implements Filter {
     
     private static void addUserToSession(final HttpServletRequest request) {
         // Simulate a real user session by adding a user object
-        request.getSession(true).setAttribute("user", new User("John", "Apricot", "Antarctica", null));
+        request.getSession(true).setAttribute("user", new String("Sharib"));
     }
 
 
@@ -60,7 +59,7 @@ public class GTVGFilter implements Filter {
 
     public void init(final FilterConfig filterConfig) throws ServletException {
         this.servletContext = filterConfig.getServletContext();
-        this.application = new GTVGApplication(this.servletContext);
+        this.application = new MSWApplication(this.servletContext);
     }
 
 
@@ -102,7 +101,7 @@ public class GTVGFilter implements Filter {
              * that will process the request. If no controller is available,
              * return false and let other filters/servlets process the request.
              */
-            IGTVGController controller = this.application.resolveControllerForRequest(request);
+            MSWController controller = this.application.resolveControllerForRequest(request);
             if (controller == null) {
                 return false;
             }

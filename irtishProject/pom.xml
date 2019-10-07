@@ -22,13 +22,12 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>thymeleafexamples</groupId>
-  <artifactId>gtvg</artifactId>
+  <groupId>moonskyweather</groupId>
+  <artifactId>msw</artifactId>
   <packaging>war</packaging>
   <version>ci</version>
-  <name>Thymeleaf Examples - Good Thymes Virtual Grocery</name>
+  <name>MoonSky Weather Channel</name>
 
-  <description>Modern server-side Java template engine for both web and standalone environments</description>
 
   <licenses>
     <license>
@@ -49,35 +48,7 @@
     <developerConnection>scm:git:git@github.com:thymeleaf/thymeleafexamples-gtvg.git</developerConnection>
   </scm>
   
-  <developers>
-    <developer>
-      <id>danielfernandez</id>
-      <name>Daniel Fernandez</name>
-      <email>daniel.fernandez AT 11thlabs DOT org</email>
-      <roles>
-        <role>Project Admin</role>
-        <role>Lead Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>jmiguelsamper</id>
-      <name>Jose Miguel Samper</name>
-      <email>jmiguelsamper AT users DOT sourceforge DOT net</email>
-      <roles>
-        <role>Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>ultraq</id>
-      <name>Emanuel Rabina</name>
-      <email>emanuelrabina AT gmail DOT com</email>
-      <roles>
-        <role>Developer</role>
-      </roles>
-    </developer>
-  </developers>
   
-
   <repositories>
     <repository>
       <id>sonatype-nexus-snapshots</id>
@@ -91,8 +62,8 @@
 
 
   <properties>
-    <maven.compile.source>1.6</maven.compile.source>
-    <maven.compile.target>1.6</maven.compile.target>
+    <maven.compile.source>1.8</maven.compile.source>
+    <maven.compile.target>1.8</maven.compile.target>
     <project.build.sourceEncoding>US-ASCII</project.build.sourceEncoding>
     <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
   </properties>

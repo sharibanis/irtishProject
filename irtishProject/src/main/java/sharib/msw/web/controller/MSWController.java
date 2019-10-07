@@ -17,40 +17,21 @@
  * 
  * =============================================================================
  */
-package thymeleafexamples.gtvg.web.controller;
-
-import java.util.List;
+package sharib.msw.web.controller;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.thymeleaf.ITemplateEngine;
-import org.thymeleaf.context.WebContext;
-import thymeleafexamples.gtvg.business.entities.Product;
-import thymeleafexamples.gtvg.business.services.ProductService;
 
-public class ProductListController implements IGTVGController {
+public interface MSWController {
 
-    
-    public ProductListController() {
-        super();
-    }
-    
     
     public void process(
-            final HttpServletRequest request, final HttpServletResponse response,
-            final ServletContext servletContext, final ITemplateEngine templateEngine)
-            throws Exception {
-        
-        final ProductService productService = new ProductService();
-        final List<Product> allProducts = productService.findAll(); 
-        
-        final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-        ctx.setVariable("prods", allProducts);
-        
-        templateEngine.process("product/list", ctx, response.getWriter());
-        
-    }
-
+            HttpServletRequest request, HttpServletResponse response,
+            ServletContext servletContext, ITemplateEngine templateEngine)
+            throws Exception;
+    
+    
 }

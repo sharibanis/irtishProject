@@ -17,7 +17,7 @@
  * 
  * =============================================================================
  */
-package thymeleafexamples.gtvg.web.application;
+package sharib.msw.web.application;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,25 +29,18 @@ import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import thymeleafexamples.gtvg.web.controller.HomeController;
-import thymeleafexamples.gtvg.web.controller.IGTVGController;
-import thymeleafexamples.gtvg.web.controller.OrderDetailsController;
-import thymeleafexamples.gtvg.web.controller.OrderListController;
-import thymeleafexamples.gtvg.web.controller.ProductCommentsController;
-import thymeleafexamples.gtvg.web.controller.ProductListController;
-import thymeleafexamples.gtvg.web.controller.SubscribeController;
-import thymeleafexamples.gtvg.web.controller.UserProfileController;
+import sharib.msw.web.controller.HomeController;
+import sharib.msw.web.controller.MSWController;
 
-
-public class GTVGApplication {
+public class MSWApplication {
 
 
     private TemplateEngine templateEngine;
-    private Map<String, IGTVGController> controllersByURL;
+    private Map<String, MSWController> controllersByURL;
 
     
     
-    public GTVGApplication(final ServletContext servletContext) {
+    public MSWApplication(final ServletContext servletContext) {
 
         super();
 
@@ -68,19 +61,12 @@ public class GTVGApplication {
         this.templateEngine = new TemplateEngine();
         this.templateEngine.setTemplateResolver(templateResolver);
 
-        this.controllersByURL = new HashMap<String, IGTVGController>();
+        this.controllersByURL = new HashMap<String, MSWController>();
         this.controllersByURL.put("/", new HomeController());
-        this.controllersByURL.put("/product/list", new ProductListController());
-        this.controllersByURL.put("/product/comments", new ProductCommentsController());
-        this.controllersByURL.put("/order/list", new OrderListController());
-        this.controllersByURL.put("/order/details", new OrderDetailsController());
-        this.controllersByURL.put("/subscribe", new SubscribeController());
-        this.controllersByURL.put("/userprofile", new UserProfileController());
-
     }
 
     
-    public IGTVGController resolveControllerForRequest(final HttpServletRequest request) {
+    public MSWController resolveControllerForRequest(final HttpServletRequest request) {
         final String path = getRequestPath(request);
         return this.controllersByURL.get(path);
     }
